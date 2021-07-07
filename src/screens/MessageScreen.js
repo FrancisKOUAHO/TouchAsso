@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import { StyleSheet } from "react-native";
 import { GiftedChat } from 'react-native-gifted-chat';
+import SurveyScreen from "./SurveyScreen";
 
 
 const MessageScreen = props => {
@@ -12,7 +12,7 @@ const MessageScreen = props => {
       createdAt: new Date().getTime(),
       system: true
     },
-    // example of chat message
+
     {
       _id: 1,
       text: 'Henlo!',
@@ -29,24 +29,18 @@ const MessageScreen = props => {
   }
 
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={newMessage => handleSend(newMessage)}
-      user={{ _id: 1 }}
-    />
+    <>
+      <SurveyScreen/>
+      <GiftedChat
+        messages={messages}
+        onSend={newMessage => handleSend(newMessage)}
+        user={{ _id: 1 }}
+      />
+    </>
 
   );
-
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: 'lightgreen',
-  },
-});
 
 export default MessageScreen;
 
