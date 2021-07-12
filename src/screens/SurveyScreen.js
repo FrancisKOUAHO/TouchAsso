@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   flex: {
     flexWrap: "wrap",
-    padding: "1rem",
+    padding: 1,
   },
 });
 

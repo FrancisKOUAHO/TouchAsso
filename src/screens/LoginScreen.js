@@ -1,44 +1,118 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image, TextInput, StatusBar } from "react-native";
 
+const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
 
-const LoginScreen = props => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const LoginScreen = (props) => {
 
-  const goTo = () => {
-    props.navigation.navigate("Accueil");
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
+
+  const onChangeHandler = () => {
+    setIsLogin(!isLogin);
+    setMessage('');
   };
+
+  const onLoggedIn = token => {
+    fetch(`${API_URL}/private`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then(async res => {
+        try {
+          const jsonRes = await res.json();
+          if (res.status === 200) {
+            setMessage(jsonRes.message);
+          }
+        } catch (err) {
+          console.log(err);
+        };
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  const onSubmitHandler = () => {
+    const payload = {
+      email,
+      name,
+      password,
+    };
+    fetch(`${API_URL}/${isLogin ? 'login' : 'signup'}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(async res => {
+        try {
+          const jsonRes = await res.json();
+          if (res.status !== 200) {
+            setIsError(true);
+            setMessage(jsonRes.message);
+          } else {
+            onLoggedIn(jsonRes.token);
+            setIsError(false);
+            setMessage(jsonRes.message);
+            props.navigation.navigate('Accueil')
+          }
+        } catch (err) {
+          console.log(err);
+        };
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const getMessage = () => {
+    const status = isError ? `Error: ` : `Success: `;
+    return status + message;
+  }
+
 
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/TouchAsso.png")} style={styles.image} />
+      <Text style={styles.message}>{message}</Text>
       <StatusBar style="auto" />
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="Email."
+          placeholder="Email"
+          autoCapitalize="none"
           placeholderTextColor="#003f5c"
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={setEmail}
         />
       </View>
 
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="Password."
+          placeholder="Mots de passe"
           placeholderTextColor="#003f5c"
           secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
+          onChangeText={setPassword}
         />
       </View>
+      <Text style={[styles.message, { color: isError ? "red" : "green" }]}>{message ? getMessage() : null}</Text>
 
       <TouchableOpacity>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginBtn} onPress={goTo}>
-        <Text>LOGIN</Text>
+      <TouchableOpacity style={styles.loginBtn} onPress={onSubmitHandler}>
+        <Text>Connexion</Text>
       </TouchableOpacity>
     </View>
   );
@@ -59,13 +133,10 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: "#FFC0CB",
-    borderRadius: 30,
+    backgroundColor: "#e5e5e5",
     width: "70%",
     height: 45,
     marginBottom: 20,
-
-    alignItems: "center",
   },
 
   TextInput: {
@@ -77,17 +148,27 @@ const styles = StyleSheet.create({
 
   forgot_button: {
     height: 30,
-    marginBottom: 30,
   },
 
   loginBtn: {
     width: "80%",
-    borderRadius: 25,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
-    backgroundColor: "#FF1493",
+    backgroundColor: "#FFC0CB",
+  },
+
+  message: {
+    padding: 5,
+    marginTop: 5,
+    fontSize: 15,
+    color: "green",
+  },
+  message_error: {
+    fontSize: 10,
+    marginTop: 25,
+    color: "red",
   },
 });
 
