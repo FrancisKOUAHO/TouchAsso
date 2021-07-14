@@ -3,11 +3,7 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react
 import MessageScreen from "./MessageScreen";
 
 
-class GroupScreen extends Component {
-
-  constructor(props) {
-    super(props);
-  };
+const GroupScreen = (props) =>{
 
   state = {
     data: [
@@ -44,35 +40,34 @@ class GroupScreen extends Component {
     ],
   };
 
-  render(props) {
     return (
+
       <View style={styles.container}>
         <FlatList
           style={{ flex: 1 }}
           data={this.state.data}
-          renderItem={({ item }) => <Item item={item} />}
+          renderItem={({ item }) => <TouchableOpacity onPress={()=> props.navigation.navigate('ChatGroup')}><Item item={item} /></TouchableOpacity>}
           keyExtractor={item => item.email}
         />
       </View>
     );
-  }
 }
 
-function Item({ item, props }) {
+function Item({ item}) {
 
   return (
-    <TouchableOpacity onPress={console.log("Test")}>
       <View style={styles.listItem}>
         <Image source={{ uri: item.photo }} style={{ width: 50, height: 50, borderRadius: 30 }} />
         <View style={{ alignItems: "center", flex: 1 }}>
           <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
           <Text>{item.position}</Text>
         </View>
-        <TouchableOpacity style={{ height: 50, width: 50, justifyContent: "center", alignItems: "center" }}>
+        <TouchableOpacity
+          style={{ height: 50, width: 50, justifyContent: "center", alignItems: "center" }}
+        >
           <Text style={{ color: "red", fontSize: 30 }}>&rsaquo;</Text>
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
   );
 }
 

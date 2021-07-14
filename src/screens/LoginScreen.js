@@ -1,29 +1,29 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image, TextInput, StatusBar } from "react-native";
 
-const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+const API_URL = Platform.OS === "ios" ? "http://localhost:5000" : "http://10.0.2.2:5000";
 
 const LoginScreen = (props) => {
 
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
 
   const [isError, setIsError] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [isLogin, setIsLogin] = useState(true);
 
   const onChangeHandler = () => {
     setIsLogin(!isLogin);
-    setMessage('');
+    setMessage("");
   };
 
   const onLoggedIn = token => {
     fetch(`${API_URL}/private`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     })
       .then(async res => {
@@ -34,23 +34,23 @@ const LoginScreen = (props) => {
           }
         } catch (err) {
           console.log(err);
-        };
+        }
+        ;
       })
       .catch(err => {
         console.log(err);
       });
-  }
+  };
 
   const onSubmitHandler = () => {
     const payload = {
       email,
-      name,
       password,
     };
-    fetch(`${API_URL}/${isLogin ? 'login' : 'signup'}`, {
-      method: 'POST',
+    fetch(`${API_URL}/${isLogin ? "login" : "signup"}`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     })
@@ -64,11 +64,12 @@ const LoginScreen = (props) => {
             onLoggedIn(jsonRes.token);
             setIsError(false);
             setMessage(jsonRes.message);
-            props.navigation.navigate('Accueil')
+            props.navigation.navigate("Profile", jsonRes);
           }
         } catch (err) {
           console.log(err);
-        };
+        }
+        ;
       })
       .catch(err => {
         console.log(err);
@@ -78,7 +79,7 @@ const LoginScreen = (props) => {
   const getMessage = () => {
     const status = isError ? `Error: ` : `Success: `;
     return status + message;
-  }
+  };
 
 
   return (

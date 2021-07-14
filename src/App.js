@@ -11,19 +11,22 @@ import ProfileScreen from "./screens/ProfileScreen";
 import MessageScreen from "./screens/MessageScreen";
 import ListMessagePrivateScreen from "./screens/ListMessagePrivateScreen";
 import GroupScreen from "./screens/GroupScreen";
+import HomeScreen from "./screens/HomeScreen";
+import ChatGroupSreen from "./screens/ChatGroupScreen";
+import ListUserScreen from "./screens/ListUserScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
-function MyTabs() {
+function MyTabs({ props, navigate }) {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Group"
-        component={GroupScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
-          tabBarLabel: "Accueil",
+          tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
             <Image source={require("../assets/home.png")} style={styles.image} />
           ),
@@ -31,7 +34,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name="Message"
-        component={ListMessagePrivateScreen}
+        component={MessageScreen}
         options={{
           tabBarLabel: "Message",
           tabBarIcon: ({ color, size }) => (
@@ -55,7 +58,7 @@ function MyTabs() {
 }
 
 
-const App = () => {
+const App = ({ props, navigate }) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -70,23 +73,30 @@ const App = () => {
         }}
       >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Login"
-                      component={LoginScreen}
-                      options={(options) => {
-                        return {
-                          // headerLeft: null,
-                          title: "Connection",
-                          headerTintColor: "white",
-                        };
-                      }} />
+        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen
-          name="Accueil"
+          name="Home"
           component={MyTabs}
-        />
+          options={(options) => {
+            return {
+              title: "Accueil",
+              headerTintColor: "white",
+            };
+          }} />
         <Stack.Screen
-          name="Message"
-          component={MessageScreen}
-        />
+          name="Group"
+          component={GroupScreen}
+          options={(options) => {
+            return {
+              // headerLeft: null,
+              title: "Accueil",
+              headerTintColor: "white",
+            };
+          }} />
+        <Stack.Screen name="ListMessage" component={ListMessagePrivateScreen} />
+        <Stack.Screen name="Message" component={MessageScreen} />
+        <Stack.Screen name="ChatGroup" component={ChatGroupSreen} />
+        <Stack.Screen name="ListUser" component={ListUserScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>

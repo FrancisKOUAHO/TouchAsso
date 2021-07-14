@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { StyleSheet, Text, View, Image } from "react-native";
-
-
-const API_URL = Platform.OS === "ios" ? "http://localhost:5000" : "http://10.0.2.2:5000";
-
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
 class ProfileScreen extends Component {
 
@@ -13,38 +9,74 @@ class ProfileScreen extends Component {
   }
 
 
-  componentDidMount = () => {
-    fetch('http://localhost:5000/users_informations')
-      .then(response => response.json())
-      .then(json => console.log(json))
-  };
-
-
-  render() {
+  render(props) {
+    let user = this.props.route.params.user;
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <Image style={styles.avatar}
-                   source={{ uri: "https://bootdey.com/img/Content/avatar/avatar6.png" }} />
+      <>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.destroy}>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log("destroy");
+                }}
+              >
+                <Image style={styles.icon} source={require("../../assets/logout.png")} />
+              </TouchableOpacity>
+            </View>
 
-            <Text style={styles.name}>Francis KOUAHO</Text>
-            <Text style={styles.userInfo}>kouahofrancis@gmail.com</Text>
-            <Text style={styles.userInfo}>Entraineur</Text>
+            <View style={styles.headerContent}>
+              <Image style={styles.avatar}
+                     source={{ uri: "https://bootdey.com/img/Content/avatar/avatar6.png" }} />
+              <Text style={styles.name}>{user.prenom} {user.nom}</Text>
+              <Text style={styles.userInfo}>{user.email}</Text>
+              <Text style={styles.userInfo}>{user.type}</Text>
+            </View>
           </View>
         </View>
 
-        <View style={styles.body}>
-          <View style={styles.item}>
-            <View style={styles.iconContent}>
-              <Image style={styles.icon} source={{ uri: "https://img.icons8.com/color/70/000000/cottage.png" }} />
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.info}>Home</Text>
-            </View>
+        <View style={styles.container}>
+          <View style={styles.blackbox}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.push("Home")
+              }}
+            >
+              <Image style={styles.redbox} source={require("../../assets/home.png")}/>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("Group")
+              }}
+            >
+              <Image style={styles.redbox} source={require("../../assets/group.png")}/>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.bluebox}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("ListMessage")
+              }}
+            >
+              <Image style={styles.redbox} source={require("../../assets/message.png")}/>
+            </TouchableOpacity>
           </View>
         </View>
-      </View>
+
+        <View style={styles.container}>
+          <View style={styles.bluebox}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("ListUser")
+              }}
+            >
+              <Image style={styles.redbox} source={require("../../assets/note.png")}/>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </>
     );
   }
 }
@@ -94,14 +126,36 @@ const styles = StyleSheet.create({
     paddingRight: 5,
   },
   icon: {
-    width: 30,
-    height: 30,
-    marginTop: 20,
+    width: 40,
+    height: 40,
+    marginTop: 15,
   },
   info: {
     fontSize: 18,
     marginTop: 20,
     color: "#FFFFFF",
+  },
+  destroy: {
+    marginLeft: "80%",
+  },
+  container: {
+    margin: "4%",
+    flexDirection: "row",
+    justifyContent: 'space-around',
+    alignItems: "center",
+    flexWrap: 'wrap',
+  },
+  bluebox: {
+    width: 60,
+    height: 60
+  },
+  redbox: {
+    width: 60,
+    height: 60
+  },
+  blackbox: {
+    width: 60,
+    height: 60
   },
 });
 
