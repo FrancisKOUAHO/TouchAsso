@@ -31,7 +31,7 @@ const ListUserScreen = () => {
                   <View style={styles.square}>
                     <Text>{`n°:${item.id}`}</Text>
                     <Text>{`Prénom : ${item.prenom}`}</Text>
-                    <Text>{`Nom: ${item.nom} aa`}</Text>
+                    <Text>{`Nom: ${item.nom}`}</Text>
                     <Text>{`Rôle: ${item.type}`}</Text>
                   </View>
                 </View>
