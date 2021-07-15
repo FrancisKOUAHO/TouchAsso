@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
+const API_URL = Platform.OS === "ios" ? "https://api-touch-assso.herokuapp.com" : "https://api-touch-assso.herokuapp.com";
 
 const ListUserScreen = () => {
 
@@ -8,7 +9,7 @@ const ListUserScreen = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/me")
+    fetch(`${API_URL}/me`)
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => error)

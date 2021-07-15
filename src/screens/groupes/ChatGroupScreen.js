@@ -1,55 +1,45 @@
-import React, { Component } from "react";
-import { TextInput, StyleSheet, Text, View } from "react-native";
-import io from "socket.io-client";
+import React, { useState, useCallback, useEffect } from "react";
+import { GiftedChat } from "react-native-gifted-chat";
 
-class ChatGroupSreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chatMessage: "",
-      chatMessages: [],
-    };
-  }
+const API_URL = Platform.OS === "ios" ? "https://api-touch-assso.herokuapp.com" : "https://api-touch-assso.herokuapp.com";
 
-  componentDidMount() {
-    this.socket = io("http://localhost:5000");
-    this.socket.on("chat message", msg => {
-      this.setState({ chatMessages: [...this.state.chatMessages, msg] });
+
+const ChatGroupSreen = props => {
+  const [messages, setMessages] = useState([]);
+
+  let user = props.route.params;
+  console.log(user);
+
+
+  useEffect(() => {
+    fetch(`${API_URL}/groupe/${user.id}/message`)
+      .then((response) => response.json())
+      .then((json) => setMessages(json))
+      .catch((error) => console.error(error));
+  }, []);
+
+  const onSend = useCallback((messages = []) => {
+    fetch(`${API_URL}/message/send`, {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({
+        "idEmetteur": user.id,
+        "idDestinataire": 2,
+        "typeDestinataire": "user",
+        "texte": this.messages,
+      }),
     });
-  }
+    setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+  }, []);
 
-  submitChatMessage() {
-    this.socket.emit("chat message", this.state.chatMessage);
-    this.setState({ chatMessage: "" });
-  }
-
-  render() {
-    const chatMessages = this.state.chatMessages.map(chatMessage => (
-      <Text key={chatMessage}>{chatMessage}</Text>
-    ));
-
-    return (
-      <View style={styles.container}>
-        <TextInput
-          style={{ height: 40, borderWidth: 2 }}
-          autoCorrect={false}
-          value={this.state.chatMessage}
-          onSubmitEditing={() => this.submitChatMessage()}
-          onChangeText={chatMessage => {
-            this.setState({ chatMessage });
-          }}
-        />
-        {chatMessages}
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F5FCFF",
-  },
-});
+  return (
+    <GiftedChat
+      messages={messages}
+      onSend={messages => onSend(messages)}
+      user={user.id}
+    />
+  );
+};
 
 export default ChatGroupSreen;
+

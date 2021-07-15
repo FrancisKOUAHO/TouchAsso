@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, Text, View, TouchableOpacity, Image, StyleSheet } from "react-native";
 
+const API_URL = Platform.OS === "ios" ? "https://api-touch-assso.herokuapp.com" : "https://api-touch-assso.herokuapp.com";
+
+
 const GroupScreen = props => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
   let user = props.route.params;
+  console.log(user)
 
   useEffect(() => {
-    fetch(`http://localhost:5000/user/${user.id}/groupes`)
+    fetch(`${API_URL}/user/${user.id}/groupes`)
       .then((response) => response.json())
       .then((json) => console.log(setData(json)))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
+
 
   return (
     <View style={{ flex: 1, padding: 24 }}>
@@ -25,7 +30,7 @@ const GroupScreen = props => {
               data={data}
               keyExtractor={({ id }, index) => id}
               renderItem={({ item }) => (
-                <View style={styles.listItem} onPress={() => props.navigation.navigate("ChatGroup", props)}>
+                <View style={styles.listItem} onPress={() => props.navigation.navigate("ChatGroup", item)}>
                   <Image source={{ uri: "https://reactjs.org/logo-og.png" }}
                          style={{ width: 50, height: 50, borderRadius: 30 }} />
                   <View style={{ alignItems: "center", flex: 1 }}>
@@ -34,7 +39,7 @@ const GroupScreen = props => {
                     <Text>{item.position}</Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => props.navigation.navigate("ChatGroup", props)}
+                    onPress={() => props.navigation.navigate("ChatGroup", item)}
                     style={{ height: 50, width: 50, justifyContent: "center", alignItems: "center" }}
                   >
                     <Text style={{ color: "red", fontSize: 30 }}>&rsaquo;</Text>

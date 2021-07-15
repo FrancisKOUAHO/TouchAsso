@@ -3,7 +3,7 @@ import jwtDecode from "jwt-decode";
 import localStorage from "localStorage"
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-const API_URL = Platform.OS === "ios" ? "http://localhost:5000" : "http://10.0.2.2:5000";
+const API_URL = Platform.OS === "ios" ? "https://api-touch-assso.herokuapp.com" : "https://api-touch-assso.herokuapp.com";
 
 
 class ProfileScreen extends Component {

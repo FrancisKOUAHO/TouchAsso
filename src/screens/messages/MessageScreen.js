@@ -1,49 +1,61 @@
-import React, {useState} from "react";
-import { GiftedChat } from 'react-native-gifted-chat';
-import SurveyScreen from "../SurveyScreen";
+import React, { Component } from "react";
+import { GiftedChat } from "react-native-gifted-chat";
 
+class MessageScreen extends Component {
+  state = {
+    messages: [],
+  };
 
-const MessageScreen = props => {
+  componentDidMount() {
+    this.setState({
+      messages: [
+        {
+          _id: 1,
+          text: "Bonjour",
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: "React Native",
+            avatar: "https://placeimg.com/140/140/any",
+          },
+        },
+      ],
+    });
 
-  const [messages, setMessages] = useState([
-    {
-      _id: 0,
-      text: 'New room created.',
-      createdAt: new Date().getTime(),
-      system: true
-    },
-
-    {
-      _id: 1,
-      text: 'Henlo!',
-      createdAt: new Date().getTime(),
-      user: {
+    setTimeout(() => {
+      const message = {
         _id: 2,
-        name: 'Test User'
-      }
-    }
-  ]);
-
-  function handleSend(newMessage = []) {
-    setMessages(GiftedChat.append(messages, newMessage));
+        text: "Ca va et toi ?",
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: "React Native",
+          avatar: "https://placeimg.com/140/140/any",
+        },
+      };
+      this.setState(previousState => ({
+        messages: GiftedChat.append(previousState.messages, message),
+      }));
+    }, 10000);
   }
 
-  return (
-    <>
-      <SurveyScreen/>
+  onSend(messages = []) {
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, messages),
+    }));
+  }
+
+  render() {
+    return (
       <GiftedChat
-        messages={messages}
-        onSend={newMessage => handleSend(newMessage)}
-        user={{ _id: 1 }}
+        messages={this.state.messages}
+        onSend={messages => this.onSend(messages)}
+        user={{
+          _id: 1,
+        }}
       />
-    </>
-
-  );
-};
-
+    );
+  }
+}
 
 export default MessageScreen;
-
-
-
-
