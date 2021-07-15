@@ -6,13 +6,12 @@ const ListUserScreen = () => {
 
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  console.log(data);
 
   useEffect(() => {
     fetch("http://localhost:5000/me")
       .then((response) => response.json())
       .then((json) => setData(json))
-      .catch((error) => console.error(error))
+      .catch((error) => error)
       .finally(() => setLoading(false));
   }, []);
 

@@ -3,10 +3,9 @@ import { Text, View, StyleSheet, TouchableOpacity, Image, TextInput, StatusBar }
 
 const API_URL = Platform.OS === "ios" ? "http://localhost:5000" : "http://10.0.2.2:5000";
 
-const LoginScreen = (props) => {
+const LoginScreen = props => {
 
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
   const [isError, setIsError] = useState(false);
@@ -47,7 +46,7 @@ const LoginScreen = (props) => {
       email,
       password,
     };
-    fetch(`${API_URL}/${isLogin ? "login" : "signup"}`, {
+    fetch(`${API_URL}/${isLogin ? 'login' : 'signup'}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -84,7 +83,7 @@ const LoginScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <Image source={require("../../assets/TouchAsso.png")} style={styles.image} />
+      <Image source={require("../../../assets/TouchAsso.png")} style={styles.image} />
       <Text style={styles.message}>{message}</Text>
       <StatusBar style="auto" />
       <View style={styles.inputView}>
@@ -156,7 +155,6 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
     backgroundColor: "#FFC0CB",
   },
 

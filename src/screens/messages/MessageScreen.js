@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { GiftedChat } from 'react-native-gifted-chat';
-import SurveyScreen from "./SurveyScreen";
+import SurveyScreen from "../SurveyScreen";
 
 
 const MessageScreen = props => {

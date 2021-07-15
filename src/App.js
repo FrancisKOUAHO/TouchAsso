@@ -6,14 +6,16 @@ import { Image, StyleSheet } from "react-native";
 
 
 import WelcomeScreen from "./screens/WelcomeScreen";
-import LoginScreen from "./screens/LoginScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import MessageScreen from "./screens/MessageScreen";
-import ListMessagePrivateScreen from "./screens/ListMessagePrivateScreen";
-import GroupScreen from "./screens/GroupScreen";
+import LoginScreen from "./screens/auth/LoginScreen";
+import ProfileScreen from "./screens/user/ProfileScreen";
+import MessageScreen from "./screens/messages/MessageScreen";
+import ListMessagePrivateScreen from "./screens/messages/ListMessagePrivateScreen";
+import GroupScreen from "./screens/groupes/GroupScreen";
 import HomeScreen from "./screens/HomeScreen";
-import ChatGroupSreen from "./screens/ChatGroupScreen";
-import ListUserScreen from "./screens/ListUserScreen";
+import ChatGroupSreen from "./screens/groupes/ChatGroupScreen";
+import ListUserScreen from "./screens/user/ListUserScreen";
+import SignUpScreen from "./screens/auth/SignUpScreen";
+import GroupeCreate from "./screens/groupes/create/GroupeCreate";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -97,6 +99,8 @@ const App = ({ props, navigate }) => {
         <Stack.Screen name="Message" component={MessageScreen} />
         <Stack.Screen name="ChatGroup" component={ChatGroupSreen} />
         <Stack.Screen name="ListUser" component={ListUserScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+        <Stack.Screen name="GroupeCreate" component={GroupeCreate} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>

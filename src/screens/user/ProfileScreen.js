@@ -1,27 +1,26 @@
 import React, { Component } from "react";
-import axios from "axios";
+import jwtDecode from "jwt-decode";
+import localStorage from "localStorage"
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-class ProfileScreen extends Component {
+const API_URL = Platform.OS === "ios" ? "http://localhost:5000" : "http://10.0.2.2:5000";
 
+
+class ProfileScreen extends Component {
   constructor(props) {
     super(props);
   }
 
 
-  render(props) {
+  render() {
     let user = this.props.route.params.user;
     return (
       <>
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.destroy}>
-              <TouchableOpacity
-                onPress={() => {
-                  console.log("destroy");
-                }}
-              >
-                <Image style={styles.icon} source={require("../../assets/logout.png")} />
+              <TouchableOpacity onPress={this.logUserOut}>
+                <Image style={styles.icon} source={require("../../../assets/logout.png")} />
               </TouchableOpacity>
             </View>
 
@@ -39,28 +38,28 @@ class ProfileScreen extends Component {
           <View style={styles.blackbox}>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.push("Home")
+                this.props.navigation.push("Home");
               }}
             >
-              <Image style={styles.redbox} source={require("../../assets/home.png")}/>
+              <Image style={styles.redbox} source={require("../../../assets/home.png")} />
             </TouchableOpacity>
           </View>
           <View>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate("Group")
+                this.props.navigation.navigate("Group", user);
               }}
             >
-              <Image style={styles.redbox} source={require("../../assets/group.png")}/>
+              <Image style={styles.redbox} source={require("../../../assets/group.png")} />
             </TouchableOpacity>
           </View>
           <View style={styles.bluebox}>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate("ListMessage")
+                this.props.navigation.navigate("ListMessage", user);
               }}
             >
-              <Image style={styles.redbox} source={require("../../assets/message.png")}/>
+              <Image style={styles.redbox} source={require("../../../assets/message.png")} />
             </TouchableOpacity>
           </View>
         </View>
@@ -69,10 +68,29 @@ class ProfileScreen extends Component {
           <View style={styles.bluebox}>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate("ListUser")
+                this.props.navigation.navigate("ListUser", user);
               }}
             >
-              <Image style={styles.redbox} source={require("../../assets/note.png")}/>
+              <Image style={styles.redbox} source={require("../../../assets/note.png")} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.bluebox}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("SignUp", user);
+              }}
+            >
+              <Image style={styles.redbox} source={require("../../../assets/add-user.png")} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.bluebox}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate("GroupeCreate", user);
+              }}
+            >
+              <Image style={styles.redbox} source={require("../../../assets/pen.png")} />
             </TouchableOpacity>
           </View>
         </View>
@@ -141,21 +159,21 @@ const styles = StyleSheet.create({
   container: {
     margin: "4%",
     flexDirection: "row",
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
     alignItems: "center",
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
   },
   bluebox: {
     width: 60,
-    height: 60
+    height: 60,
   },
   redbox: {
     width: 60,
-    height: 60
+    height: 60,
   },
   blackbox: {
     width: 60,
-    height: 60
+    height: 60,
   },
 });
 
