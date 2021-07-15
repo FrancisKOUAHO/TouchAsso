@@ -8,7 +8,6 @@ const GroupScreen = props => {
   let user = props.route.params;
 
   useEffect(() => {
-
     fetch(`http://localhost:5000/user/${user.id}/groupes`)
       .then((response) => response.json())
       .then((json) => console.log(setData(json)))

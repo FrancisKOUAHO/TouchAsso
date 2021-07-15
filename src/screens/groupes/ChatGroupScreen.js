@@ -1,34 +1,55 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { GiftedChat } from 'react-native-gifted-chat'
+import React, { Component } from "react";
+import { TextInput, StyleSheet, Text, View } from "react-native";
+import io from "socket.io-client";
 
- const ChatGroupSreen = props => {
-  const [messages, setMessages] = useState([]);
+class ChatGroupSreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      chatMessage: "",
+      chatMessages: [],
+    };
+  }
 
+  componentDidMount() {
+    this.socket = io("http://localhost:5000");
+    this.socket.on("chat message", msg => {
+      this.setState({ chatMessages: [...this.state.chatMessages, msg] });
+    });
+  }
 
-   let user = props.route.params;
+  submitChatMessage() {
+    this.socket.emit("chat message", this.state.chatMessage);
+    this.setState({ chatMessage: "" });
+  }
 
-   useEffect(() => {
+  render() {
+    const chatMessages = this.state.chatMessages.map(chatMessage => (
+      <Text key={chatMessage}>{chatMessage}</Text>
+    ));
 
-     fetch(`http://localhost:5000/groupe/${user.id}/message`)
-       .then((response) => response.json())
-       .then((json) => setMessages(json))
-       .catch((error) => console.error(error))
-   }, []);
-
-   console.log(messages)
-
-  const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-  }, [])
-
-  return (
-    <GiftedChat
-      messages={messages}
-      onSend={messages => onSend(messages)}
-      user={user.id}
-    />
-  )
+    return (
+      <View style={styles.container}>
+        <TextInput
+          style={{ height: 40, borderWidth: 2 }}
+          autoCorrect={false}
+          value={this.state.chatMessage}
+          onSubmitEditing={() => this.submitChatMessage()}
+          onChangeText={chatMessage => {
+            this.setState({ chatMessage });
+          }}
+        />
+        {chatMessages}
+      </View>
+    );
+  }
 }
 
-export default ChatGroupSreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F5FCFF",
+  },
+});
 
+export default ChatGroupSreen;
