@@ -9,7 +9,7 @@ const ListUserScreen = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_URL}/me`)
+    fetch(`${API_URL}/users`)
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => error)

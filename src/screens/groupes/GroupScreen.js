@@ -9,12 +9,11 @@ const GroupScreen = props => {
   const [data, setData] = useState([]);
 
   let user = props.route.params;
-  console.log(user)
 
   useEffect(() => {
     fetch(`${API_URL}/user/${user.id}/groupes`)
       .then((response) => response.json())
-      .then((json) => console.log(setData(json)))
+      .then((json) => setData(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);

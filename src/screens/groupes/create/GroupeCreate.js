@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, Image, TextInput, StatusBar } from "react-native";
 
-const API_URL = Platform.OS === "ios" ? "http://localhost:5000" : "http://10.0.2.2:5000";
+const API_URL = Platform.OS === "ios" ? "https://api-touch-assso.herokuapp.com" : "https://api-touch-assso.herokuapp.com";
 
 const GroupeCreate = (props) => {
 
